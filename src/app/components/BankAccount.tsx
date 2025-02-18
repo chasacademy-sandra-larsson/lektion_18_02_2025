@@ -53,11 +53,12 @@ function reducer(state: BankState, action: BankAction) {
                 balance: state.balance - state.loan
             };
         case 'closeAccount':
-            if(state.loan > 0 || state.balance !== 0)
+            if(state.loan > 0 && state.balance !== 0)
                 return state
             return initialState
         
         default: 
+           throw new Error("Invalid action")
     }
 }
 
@@ -67,18 +68,20 @@ function BankAccount() {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    console.log(state)
+
     return (
-        <div>
-            <h1>Bank</h1>
+        <div className="flex flex-col gap-4">
+            <h1 className="text-2xl font-bold" >Bank</h1>
             <p> Balance: { state.balance }</p>
             <p>Loan: { state.loan }</p>
             <p>Is active?: { state.isActive ? "Yes" : "No"}</p>
-            <button onClick={() => dispatch({type: 'openAccount'})}>Open Account</button>
-            <button>Deposit 100</button>
-            <button>Withdraw 100</button>
-            <button>Request Loan 1000</button>
-            <button>Pay Loan</button>
-            <button>Close account</button>
+            <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded" onClick={() => dispatch({type: 'openAccount'})}>Open Account</button>
+            <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded" onClick={() => dispatch({type: 'deposit', payload: 100})}>Deposit 100</button>
+            <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded" onClick={() => dispatch({type: 'withdraw', payload: 100})}>Withdraw 100</button>
+            <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded" onClick={() => dispatch({type: 'requestLoan', payload: 1000})}>Request Loan 1000</button>
+            <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded" onClick={() => dispatch({type: 'payLoan'})}>Pay Loan</button>
+            <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded" onClick={() => dispatch({type: 'closeAccount'})}>Close account</button>
         </div>
 
     )
